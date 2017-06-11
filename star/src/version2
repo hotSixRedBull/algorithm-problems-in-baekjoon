@@ -1,0 +1,106 @@
+import java.util.Scanner;
+import java.util.Stack;
+import java.util.ArrayList;
+
+//2가지 접근방법
+//1. 수학적 접근.(각 라인의 빈칸과 별의 개수를 계산하여 프린트) - - - 반쯤성공..?ㅋㅋ 
+//2. 프랙탈 함수 생성
+//3. 반대로 접근
+public class Main {
+	static String[] printed;
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		ArrayList<ArrayList<Integer>> al = new ArrayList<ArrayList<Integer>>();
+		ArrayList<Integer> sal = new ArrayList<Integer>();
+		printed = new String[] { "", "", "" };
+		Scanner sc = new Scanner(System.in);
+		int size = sc.nextInt();
+		int l = size * 2 - 1, left = 0, right = 0, goal = 4, numberOfStar = 0;
+		Stack<String> st = new Stack<String>();
+		String temp = "";
+		// setting arraylist
+		for (int i = 1; i <= size / 3; i++) {
+			sal.clear();
+			if (i == 1)
+				sal.add(1);
+			if (i  == goal + 1) {
+				sal.add(1);
+				for (int j = 0; j < goal/2-1; j++) {
+					sal.add(0);
+				}
+				sal.add(1);
+				goal *= 2;
+			}else if( i == size / 3){
+				for(int j=0;j<size/3;j++){
+					sal.add(1);
+				}
+			}
+			al.add(sal);
+		}
+		
+		// setting stack
+		for (int i = 0; i < size; i++) {
+			numberOfStar = 0;
+			temp = "";
+			if (i % 3 == 0 && i != 0) {// 아래에서 두번째 줄 부터 매 줄마다
+				left += 3;
+				right += 3;
+			}
+			
+			//setting left blank
+			for (int j = 0; j < left; j++)
+				temp += " ";
+			
+			//setting each line
+			switch (i % 3) {
+			case 0://for bottom
+				while (temp.length() + right < l) {
+					if (al.get(size / 3 - i / 3 - 1).get(numberOfStar) == 1)
+						temp += "*****";
+					else
+						temp += "     ";
+					if (temp.length() + 1 + right < l)
+						temp += " ";
+					numberOfStar++;
+				}
+				break;
+			case 1://for middle floor
+				while (temp.length() + right < l) {
+					if (al.get(size / 3 - i / 3 - 1).get(numberOfStar) == 1)
+						temp += " * * ";
+					else
+						temp += "     ";
+					if (temp.length() + 1 + right < l)
+						temp += " ";
+					numberOfStar++;
+				}
+				break;
+			case 2://for top floor
+				while (temp.length() + right < l) {
+					if (al.get(size / 3 - i / 3 - 1).get(numberOfStar) == 1)
+						temp += "  *  ";
+					else
+						temp += "     ";
+					if (temp.length() + 1 + right < l)
+						temp += " ";
+					numberOfStar++;
+				}
+				break;
+			}
+			
+			//setting right blank
+			for (int j = 0; j < right; j++)
+				temp += " ";
+
+			st.push(temp);
+		}
+		
+		//printing stack
+		for (int i = st.size(); i > 0; i--) {
+			System.out.println(st.peek());
+			st.pop();
+		}
+	}
+
+}

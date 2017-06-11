@@ -1,0 +1,45 @@
+//2156 포도주 시식
+//꼭 마지막이나 처음을 안골라도 되는게 함정카드
+import java.util.HashMap;
+import java.util.Scanner;
+class pair{
+	Boolean b;
+	int i;
+	public pair(Boolean x,int y){
+		b = x;i = y;
+	}
+}
+public class Main {
+	public static HashMap<Integer,Integer> wines;
+	public static HashMap<pair,Integer> check;
+	public static int start_drink(Boolean serial,int cur){
+		int max=0;
+		pair p = new pair(serial,cur);
+		if(check.containsKey(p))
+			return check.get(p);
+		if(cur > wines.size()-1)
+			return 0;
+		if(!serial){//처음 마시는 것임. 즉 한 번 더 가능
+			max = Math.max(start_drink(true,cur+1), start_drink(false,cur+2));
+		}else if(serial){//이미 두 잔째이므로 다음으로 넘어가야 함
+		    //두 칸 아래
+			max = Math.max(max, start_drink(false,cur+2));
+		}
+		check.put(p,max+wines.get(cur));
+		return check.get(p);
+	}
+	public static void main(String[] args) { 
+		// TODO Auto-generated method stub
+		check = new HashMap<pair,Integer>();
+		wines = new HashMap<Integer,Integer>();
+		wines.put(0, 0);
+		Scanner sc = new Scanner(System.in);
+		int num = sc.nextInt();
+		for(int i=0;i<num;i++){
+			wines.put(i+1, sc.nextInt());
+		}
+		//저장 완료
+		System.out.println(Math.max(start_drink(false,1),start_drink(false,2)));
+	}
+}
+

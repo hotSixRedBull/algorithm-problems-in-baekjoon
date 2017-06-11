@@ -1,0 +1,68 @@
+import java.util.Scanner;
+
+public class Main {
+	static int[][] map;
+	static int size;
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		size = sc.nextInt(); // size = 3*2^n (ex) 3,6,12,24,48,96,192,3072
+		map = new int[size][2 * size]; // row will be 2*size, height will be
+		if(size<=48){
+			f(0, size, 0);
+		}else{
+			f(0, size, size/2);
+			copy_map();
+		}
+		print_map();
+		//print_num();
+		sc.close();
+	}
+
+	public static void f(int x, int y,int max) {
+		if(max<size){
+			map[x][y]++;
+			for (int i = -1; i < 2; i += 2)// next floor
+				map[x + 1][y + i]++;
+			for (int i = -2; i < 3; i++)// lowest floor of minimum
+				map[x + 2][y + i]++;
+			if (x + 3 < size) {
+				f(x + 3, y - 3,max+2);
+				f(x + 3, y + 3,max+2);
+			}
+		}
+	}
+
+	public static void print_map() {
+		for (int i = 0; i < size; i++) {
+			for (int j = 1; j < size * 2; j++) {
+				if (map[i][j]%2 == 1)
+					System.out.print("*");
+				else
+					System.out.print(" ");
+			}
+			System.out.println();
+		}
+	}
+	
+	public static void copy_map(int lb,int width,int end) {
+		//copy to end 3분의 1만 계산해서 아래에 두번 붙여넣기.
+		for(int i=end/2;i<end;i++){
+			for(int j=lb;j<width;j++){//왼쪽아래
+				map[i][j] = map[i-end/2][j+end/2];
+			}
+			for(int j=width;j<width*2;j++){//오른쪽아래
+				map[i][j] = map[i-end/2][j-end/2];
+			}
+		}
+	}
+	
+	public static void print_num() {
+		for (int i = 0; i < size; i++) {
+			for (int j = 1; j < size * 2; j++) {
+				System.out.print(map[i][j]);
+			}
+			System.out.println();
+		}
+	}
+}

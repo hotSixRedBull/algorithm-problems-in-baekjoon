@@ -1,0 +1,64 @@
+import java.util.Scanner;
+import java.util.Stack;
+
+//2가지 접근방법
+//1. 수학적 접근.(각 라인의 빈칸과 별의 개수를 계산하여 프린트) - - - 반쯤성공..?ㅋㅋ 
+//2. 프랙탈 함수 생성
+//3. 반대로 접근
+public class Main {
+	static String[] printed;
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		printed = new String[] { "", "", "" };
+		Scanner sc = new Scanner(System.in);
+		int size = sc.nextInt();
+		int l = size*2-1,left=0,right=0;
+		Stack<String> st = new Stack<String>();
+		String temp = "";
+		
+		for(int i=0;i<size;i++){
+			temp = "";
+			if(i%3==0&&i!=0){
+				left+=3;
+				right+=3;
+			}
+			for(int j=0;j<left;j++)
+				temp += " ";
+			
+			switch(i%3){
+			case 0:
+				while(temp.length()+right < l){
+					temp+="*****";
+					if(temp.length()+1+right<l)
+						temp+=" ";
+				}
+				break;
+			case 1:
+				while(temp.length()+right < l){
+					temp+=" * * ";
+					if(temp.length()+1+right<l)
+						temp+=" ";
+				}
+				break;
+			case 2:
+				while(temp.length()+right < l){
+					temp+="  *  ";
+					if(temp.length()+1+right<l)
+						temp+=" ";
+				}
+				break;
+			}
+			
+			for(int j=0;j<right;j++)
+				temp += " ";
+			
+			st.push(temp);
+		}
+		
+		for(int i=st.size();i>0;i--){
+			System.out.println(st.peek());
+			st.pop();
+		}
+	}
+
+}

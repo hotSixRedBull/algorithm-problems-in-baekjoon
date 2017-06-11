@@ -1,0 +1,57 @@
+import java.util.HashMap;
+import java.util.Scanner;
+
+//2579 계단오르기
+class pair {
+	int first;
+	int second;
+	public pair(int i, int j) {
+		first = i;second = j;
+	}
+}
+
+public class Main {
+	public static HashMap<Integer, Integer> stair;
+	public static HashMap<pair, Integer> check;
+
+	public static int step(int serial, int cur) {
+		int max = 0;
+		pair store = new pair(serial, cur);
+		if (!check.containsKey(store)) {
+			// 한걸음 전 혹은 두걸음 전
+			if (cur == 1)
+				return stair.get(1);
+			if (serial == 0) {// 2칸 쩜프해서 내려옴
+				// 한 칸 아래랑 두 칸 아래중 최댓값
+				if (cur == 2) {
+					return stair.get(1) + stair.get(2);
+				} else {
+					max = Math.max(step(1, cur - 1), step(0, cur - 2));
+				}
+			} else if (serial == 1) {// 한칸 내려옴
+				// 두 칸 아래
+				if (cur == 2) {
+					return stair.get(2);
+				} else {
+					max = Math.max(max, step(0, cur - 2));
+				}
+			}
+			check.put(store, max + stair.get(cur));
+		}
+		return check.get(store);
+	}
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		check = new HashMap<pair, Integer>();
+		stair = new HashMap<Integer, Integer>();
+		stair.put(0, 0);
+		Scanner sc = new Scanner(System.in);
+		int num = sc.nextInt();
+		for (int i = 0; i < num; i++) {
+			stair.put(i + 1, sc.nextInt());
+		}
+		// 저장 완료
+		System.out.println(Math.max(step(1, num), step(0, num)));
+	}
+}
